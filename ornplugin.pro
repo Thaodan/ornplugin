@@ -1,11 +1,13 @@
 TEMPLATE = lib
 TARGET = ornplugin
 QT += qml quick
-CONFIG += qt plugin static c++11
+
+CONFIG += qt plugin static c++11 link_pkgconfig
 CONFIG(release, debug|release): DEFINES += QT_NO_DEBUG_OUTPUT
 VERSION = 0.1
-
 TARGET = $$qtLibraryTarget($$TARGET)
+PKGCONFIG+= packagekitqt5
+INCLUDEPATH+= /usr/include/packagekitqt5/
 
 uri = harbour.orn
 

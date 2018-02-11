@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSet>
 
-#include <PackageKit/packagekit-qt5/Transaction>
+#include <PackageKit/Transaction>
 
 class QDBusPendingCallWatcher;
 class QQmlEngine;

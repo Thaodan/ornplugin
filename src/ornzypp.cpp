@@ -501,6 +501,7 @@ void OrnZypp::pInstalledApps()
 
         auto title = name;
         QString icon;
+#if 0
         auto desktopFiles = PackageKit::Transaction::packageDesktopFiles(name);
 
         qDebug() << "Adding installed package" << name;
@@ -541,6 +542,7 @@ void OrnZypp::pInstalledApps()
                 }
             }
         }
+#endif
         apps << App{
             name,
             title,

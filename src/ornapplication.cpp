@@ -253,7 +253,10 @@ void OrnApplication::onInstalledPackagesChanged()
         mInstalledPackageId.clear();
         emit this->installedVersionChanged();
     }
+#if 0
+    #FIXME disabled for now
     this->checkDesktopFile();
+#endif
 }
 
 void OrnApplication::onPackageInstalled(const QString &packageId)
@@ -271,9 +274,10 @@ void OrnApplication::onPackageRemoved(const QString &packageId)
         emit this->removed();
     }
 }
-
+#if 0
 void OrnApplication::checkDesktopFile()
 {
+
     auto desktopFile = mDesktopFile;
     if (mPackageName.isEmpty() || mInstalledPackageId.isEmpty())
     {
@@ -281,6 +285,7 @@ void OrnApplication::checkDesktopFile()
     }
     else
     {
+        //FIXME
         auto desktopFiles = PackageKit::Transaction::packageDesktopFiles(mPackageName);
         for (const auto &file : desktopFiles)
         {
@@ -297,4 +302,6 @@ void OrnApplication::checkDesktopFile()
         mDesktopFile = desktopFile;
         emit this->canBeLaunchedChanged();
     }
+
 }
+#endif

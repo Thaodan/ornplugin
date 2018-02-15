@@ -123,26 +123,27 @@ void OrnBackup::pSearchPackages()
     mPackagesToInstall.clear();
     mSearchIndex = 0;
 
-    auto t = new PackageKit::Transaction();
+    auto t = PackageKit::Daemon::searchNames(mNamesToSearch[mSearchIndex]);
     connect(t, &PackageKit::Transaction::errorCode, mZypp, &OrnZypp::pkError);
     connect(t, &PackageKit::Transaction::package, this, &OrnBackup::pAddPackage);
     // It seems that the PackageKit::Transaction::searchNames(QStringList, ...)
     // does searches only for the first name so we use this hack
     connect(t, &PackageKit::Transaction::finished, [this, t]()
     {
-        ++mSearchIndex;
+        /* ++mSearchIndex;
         if (mSearchIndex < mNamesToSearch.size())
         {
-            t->reset();
-            t->searchNames(mNamesToSearch[mSearchIndex]);
+            delete t;
+            auto t = PackageKit::Daemon::searchNames(mNamesToSearch[mSearchIndex]);
         }
         else
         {
-            t->deleteLater();
-            this->pInstallPackages();
-        }
+        */
+
+        t->deleteLater();
+        this->pInstallPackages();
+        
     });
-    t->searchNames(mNamesToSearch[mSearchIndex]);
 }
 
 void OrnBackup::pAddPackage(int info, const QString &packageId, const QString &summary)
@@ -200,9 +201,8 @@ void OrnBackup::pInstallPackages()
     }
     else
     {
-        auto t = mZypp->transaction();
+        auto t = PackageKit::Daemon::installPackages(ids);
         connect(t, &PackageKit::Transaction::finished, this, &OrnBackup::pFinishRestore);
-        t->installPackages(ids);
     }
 }
 
@@ -307,9 +307,8 @@ void OrnBackup::pRefreshRepos()
 {
     qDebug() << "Refreshing repos";
     this->setStatus(RefreshingRepos);
-    auto t = new PackageKit::Transaction();
+    auto t = PackageKit::Daemon::refreshCache(false);
     connect(t, &PackageKit::Transaction::finished, t, &PackageKit::Transaction::deleteLater);
     connect(t, &PackageKit::Transaction::errorCode, mZypp, &OrnZypp::pkError);
     connect(t, &PackageKit::Transaction::finished, this, &OrnBackup::pSearchPackages);
-    t->refreshCache(false);
 }

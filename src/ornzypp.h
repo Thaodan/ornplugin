@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QSet>
+#include <QPointer>
 
 #include <PackageKit/Transaction>
+#include <PackageKit/Daemon>
 
 class QDBusPendingCallWatcher;
 class QQmlEngine;
@@ -143,8 +145,10 @@ private slots:
                    const QString &packageId,
                    const QString &summary);
 
+    void addPackageToUpdate(PackageKit::Transaction::Info, const QString& pkgid, const QString& summary);
+
 private:
-    PackageKit::Transaction *transaction();
+    void transaction_connections(QPointer<PackageKit::Transaction> transaction);
     void pPrepareFetching(PackageKit::Transaction *&fetcher);
     void pInstalledApps();
     /// This method is one big dirty hack...

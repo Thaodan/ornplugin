@@ -1,7 +1,8 @@
 TEMPLATE = lib
 TARGET = ornplugin
 QT += qml quick
-CONFIG += qt plugin static c++11
+CONFIG += qt plugin static c++11 link_pkgconfig
+PKGCONFIG+= libsolv
 CONFIG(release, debug|release): DEFINES += QT_NO_DEBUG_OUTPUT
 VERSION = 0.1
 
